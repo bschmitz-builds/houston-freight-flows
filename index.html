@@ -118,7 +118,7 @@ for (const r of DATA.trucks) {
   const dur = r.t[r.t.length-1]*TRUCK_TIME_STRETCH;
   for (let i=0;i<n;i++){
     const t0 = rnd()*Math.max(1, LOOP-dur);
-    truckTrips.push({p:r.p, ts:r.t.map(v=>v*TRUCK_TIME_STRETCH+t0), kind:'truck', trade:r.trade, dest:r.dest, kt:r.kt, min:r.min});
+    truckTrips.push({p:r.p, ts:r.t.map(v=>v*TRUCK_TIME_STRETCH+t0), kind:'truck', trade:r.trade, dest:r.dest, term:r.term, kt:r.kt, min:r.min});
   }
 }
 const SHIP_TIME_STRETCH = 1.7;  // ships glide slower than truck pulses
@@ -207,6 +207,7 @@ const dk = new deck.DeckGL({
   getTooltip:({object:o, layer})=>{
     if(!o) return null;
     if(o.kind==='truck') return {text:(o.trade==='import'?'Port import → ':'Export to port ← ')+o.dest+
+      (o.term?'\nGate: '+o.term:'')+
       '\nTonnage: '+fmt(o.kt)+' kt/yr\nFree-flow drive time: '+fmt(o.min)+' min'};
     if(o.kind==='ship') return {text:o.vt+' arrival\nTransit in frame: '+fmt(o.min)+' min'};
     if(layer && layer.id.startsWith('ambient')) return {text:'Car traffic: '+o.v.toLocaleString()+'k vehicles/day'};
